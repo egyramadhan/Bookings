@@ -21,9 +21,17 @@ Route::get('booking/{token}', 'Api\AuthController@index');
 
 
 Route::resource('bookings', 'Api\BookingController');
+Route::get('getClient/{clientid}', 'Api\BookingController@Getclient');
+Route::get('getPaid', 'Api\BookingController@Getpaid');
+Route::get('getUnpaid', 'Api\BookingController@Getunpaid');
+Route::get('getCancelled', 'Api\BookingController@Getcancelled');
+
+
 Route::resource('providers', 'Api\ProviderController');
 Route::resource('services', 'Api\ServiceController');
 Route::resource('time', 'Api\TimeController');
 Route::resource('day', 'Api\DayController');
 Route::resource('location', 'Api\LocationController');
 Route::resource('specialdayrules', 'Api\SpecialDayController');
+Route::resource('paymentstatus', 'Api\PaymentstatusController');
+Route::resource('paymentprocessor', 'Api\PaymentprocessorController');

@@ -12,6 +12,7 @@ use App\Status;
 use App\Providerhasdays;
 use App\Invoices;
 use App\Paymentprocessors;
+use DB;
 
 class BookingController extends Controller
 {
@@ -22,8 +23,56 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $responses = Bookings::get();
-        return $responses;
+        $data = DB::table('bookings')
+                    ->join('invoices', 'bookings.id', '=', 'invoices.booking_id')
+                    ->join('payment_status', 'payment_status.id', '=', 'invoices.payment_status_id')
+                    ->orderBy('bookings.id', 'desc')
+                    ->get();
+        return response()->json($data);
+    }
+
+    public function Getclient($clientid)
+    {
+        $data = DB::table('bookings')->where('client_id', $clientid)
+                    ->join('invoices', 'bookings.id', '=', 'invoices.booking_id')
+                    ->join('payment_status', 'payment_status.id', '=', 'invoices.payment_status_id')
+                    ->orderBy('bookings.id', 'desc')
+                    ->first();
+
+        return response()->json($data);
+    }
+
+    public function Getpaid()
+    {
+        $data = DB::table('bookings')
+                    ->join('invoices', 'bookings.id', '=', 'invoices.booking_id')
+                    ->join('payment_status', 'payment_status.id', '=', 'invoices.payment_status_id')
+                    ->where('payment_status.payment_status_name', '=', 'paid')
+                    ->orderBy('bookings.id', 'desc')
+                    ->get();
+        return response()->json($data);
+    }
+
+    public function Getunpaid()
+    {
+        $data = DB::table('bookings')
+                    ->join('invoices', 'bookings.id', '=', 'invoices.booking_id')
+                    ->join('payment_status', 'payment_status.id', '=', 'invoices.payment_status_id')
+                    ->where('payment_status.payment_status_name', '=', 'unpaid')
+                    ->orderBy('bookings.id', 'desc')
+                    ->get();
+        return response()->json($data);
+    }
+
+    public function Getcancelled()
+    {
+        $data = DB::table('bookings')
+                    ->join('invoices', 'bookings.id', '=', 'invoices.booking_id')
+                    ->join('payment_status', 'payment_status.id', '=', 'invoices.payment_status_id')
+                    ->where('payment_status.payment_status_name', '=', 'cancelled')
+                    ->orderBy('bookings.id', 'desc')
+                    ->get();
+        return response()->json($data);
     }
 
     /**
@@ -57,12 +106,14 @@ class BookingController extends Controller
     {
         
         $checkData = Bookings::findOrfail($id);
+
+        return $checkData;
         // dd($checkData);
-        $bookingId = $checkData;
+        // $bookingId = $checkData;
         // $data = $bookingId->with('invoices');
 
         // $data['bookings'] = Bookings::find($bookingId->id)->with(['Invoice'])->with('Status')->get();
-        $data['bookings'] = Bookings::find($bookingId->id)->with('Invoice','Status','Providers', 'Services', 'Locations')->get();
+        // $data['bookings'] = Bookings::find($bookingId->id)->with('Invoice','Status','Providers', 'Services', 'Locations')->get();
         // $data['invoices'] = Invoices::where('booking_id', $bookingId->id)->with('Paymentprocessors')->get();
         // $data['bookings']['services'] = Services::where('id',$data['bookings']->service_id)->get();
         // $data['bookings']['locations'] = Locations::where('id',$data['bookings']->location_id)->get();

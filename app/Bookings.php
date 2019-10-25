@@ -9,10 +9,10 @@ class Bookings extends Model
     protected $table = 'bookings';
     protected $guarded = [];
 
-    // public function bookings()
-    // {
-    //     return $this->belongsTo('App\Bookings');
-    // }
+    public function bookings()
+    {
+        return $this->belongsTo('App\Bookings','PIVOT');
+    }
     public function Invoice()
     {
         return $this->hasMany('App\Invoices', 'booking_id');
