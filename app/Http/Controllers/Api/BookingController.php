@@ -75,6 +75,36 @@ class BookingController extends Controller
         return response()->json($data);
     }
 
+    public function getService($service_name)
+    {
+        $data = DB::table('services')->where('service_name', $service_name)
+                ->join('bookings', 'services.id', '=', 'bookings.service_id')
+                ->join('locations', 'locations.id', '=', 'services.location_id')
+                ->get();
+        
+
+        return response()->json($data);
+    }
+
+    public function getLocation($location)
+    {
+        $data = DB::table('locations')->where('location_name', $location)
+                ->join('services', 'locations.id', '=', 'services.location_id')
+                ->join('bookings', 'locations.id', '=', 'bookings.location_id')
+                ->get();
+
+        return response()->json($data);
+    }
+
+    public function getProvider($provider)
+    {
+        $data = DB::table('providers')->where('provider_name', $provider)
+                ->join('bookings', 'providers.id', '=', 'bookings.provider_id')
+                ->join('services', 'services.id', '=', 'bookings.service_id')
+                ->get();
+        return response()->json($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

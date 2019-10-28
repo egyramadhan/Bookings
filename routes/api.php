@@ -25,10 +25,16 @@ Route::get('getClient/{clientid}', 'Api\BookingController@Getclient');
 Route::get('getPaid', 'Api\BookingController@Getpaid');
 Route::get('getUnpaid', 'Api\BookingController@Getunpaid');
 Route::get('getCancelled', 'Api\BookingController@Getcancelled');
+Route::get('getServices/{service_name}', 'Api\BookingController@getService');
+Route::get('getLocations/{location}', 'Api\BookingController@getLocation');
+Route::get('getProviders/{provider}', 'Api\BookingController@getProvider');
 
 
 Route::resource('providers', 'Api\ProviderController');
+
 Route::resource('services', 'Api\ServiceController');
+
+
 Route::resource('time', 'Api\TimeController');
 Route::resource('day', 'Api\DayController');
 Route::resource('location', 'Api\LocationController');
