@@ -102,6 +102,7 @@ class BookingController extends Controller
                 ->join('bookings', 'providers.id', '=', 'bookings.provider_id')
                 ->join('services', 'services.id', '=', 'bookings.service_id')
                 ->get();
+                
         return response()->json($data);
     }
 
